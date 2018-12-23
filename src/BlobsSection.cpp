@@ -76,7 +76,12 @@ void BlobsSection::write(std::ofstream &ofs)
 {
     if (!ofs.is_open())
         return;
-    ofs << "# " << this->section_name << " " << "- from" << " " << this->vendor_name << std::endl;
+    ofs << "# " << this->section_name;
+    if (!this->vendor_name.empty())
+    {
+        ofs << " - from" << " " << this->vendor_name;
+    }
+    ofs << std::endl;
     for (auto &x : this->v_b)
     {
         ofs << (x->modularized ? "-" : "");
