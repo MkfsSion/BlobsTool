@@ -53,6 +53,7 @@ dkms.conf
 
 # JetBrain
 .idea/
+cmake-build-debug/
 
 # Test
 hashttest

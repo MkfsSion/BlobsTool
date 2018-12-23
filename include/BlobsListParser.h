@@ -19,6 +19,7 @@
 #ifndef BLOBSTOOL_BLOBSLISTPARSER_H
 #define BLOBSTOOL_BLOBSLISTPARSER_H
 #include <fstream>
+#include <iostream>
 #include <BlobsList.h>
 
 class BlobsListParser {
@@ -26,18 +27,7 @@ private:
     std::ifstream ifs;
     BlobsList *blist;
 public:
-    explicit BlobsListParser(std::string &path) : ifs(path),blist(nullptr)
-    {
-        if (!ifs.is_open()) {
-            throw std::invalid_argument("Unable to open blobs list file");
-        }
-    }
-    explicit BlobsListParser(const char *path) : ifs(path),blist(nullptr)
-    {
-        if (!ifs.is_open()) {
-            throw std::invalid_argument("Unable to open blobs list file");
-        }
-    }
+    explicit BlobsListParser(std::string &path) : ifs(path),blist(nullptr) {}
     BlobsList parse();
     ~BlobsListParser()
     {

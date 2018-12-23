@@ -88,9 +88,13 @@ static BlobsSection blob_section_parse(std::string &line)
 
 BlobsList BlobsListParser::parse()
 {
+    if (!ifs.is_open())
+    {
+        throw std::invalid_argument("Error: Unable to open blobs list file");
+    }
     blist = new BlobsList;
     std::string line;
-    // Start parse line
+    // Start parsing lines
     while(getline(ifs, line))
     {
         if (line.empty())

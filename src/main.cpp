@@ -31,31 +31,57 @@ struct BlobsToolCmdline
     std::string top_path;
     bool hash;
     std::string output_file;
+    bool help;
+    bool version;
 };
+
+static void blobstool_version()
+{
+    std::cout << "BlobsTool v" << getBlobsToolVersionStr() << std::endl;
+}
 
 
 static void blobstool_help()
 {
-    std::cout << "BlobsTool v" << getBlobsToolVersionStr() << std::endl;
-    std::cout << "Usage: blobstool -i list_file [ -s ] [ -p top_path ] [ -u ] -o write_out_file [-v]" << std::endl;
+    std::cout << "Usage: blobstool -i list_file [ -s ] [ -p top_path ] [ -u ] -o write_out_file [-h] [-v]" << std::endl;
     std::cout << "\t -i: Input file" << std::endl;
     std::cout << "\t -s: Sort blob by order" << std::endl;
     std::cout << "\t -p: Path for abstracting blobs" << std::endl;
     std::cout << "\t -u: Update hash" << std::endl;
     std::cout << "\t -o: Output file" << std::endl;
-    std::cout << "\t -v: Show help" << std::endl;
+    std::cout << "\t -h: Show help" << std::endl;
+    std::cout << "\t -v: Show version" << std::endl;
 }
 
-static void blobstool_cmdline_process(BlobsToolCmdline cmdline)
+static int blobstool_cmdline_process(BlobsToolCmdline cmdline)
 {
-    if (cmdline.input_path.empty()||cmdline.output_file.empty())
+    if (cmdline.version)
     {
-        throw std::invalid_argument("No input file or output file specified");
+        blobstool_version();
+        return 0;
+    }
+    if (cmdline.help)
+    {
+        blobstool_help();
+        return 0;
     }
     BlobsListParser parser(cmdline.input_path);
+    BlobsList blist;
+    try
+    {
+        blist = parser.parse();
+    } catch (std::invalid_argument &e)
+    {
+        std::cout << e.what() << std::endl;
+        return 1;
+    }
     std::ofstream ofs;
-	ofs.open(cmdline.output_file, std::ios::out | std::ios::trunc);
-    BlobsList blist = parser.parse();
+    ofs.open(cmdline.output_file, std::ios::out | std::ios::trunc);
+    if (!ofs.is_open())
+    {
+        std::cout << "Failed to open output file" << std::endl;
+        return 1;
+    }
     if (cmdline.sort)
     {
         blist.sort(nullptr, nullptr);
@@ -65,6 +91,7 @@ static void blobstool_cmdline_process(BlobsToolCmdline cmdline)
         blist.reHash(cmdline.top_path, nullptr, true);
     }
     blist.write(ofs);
+    return 0;
 }
 
 static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
@@ -78,21 +105,27 @@ static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
         {
             if (!strcmp(argv[i], "-i")) {
                 expect_value = 1;
-            }
+            } else
             if (!strcmp(argv[i], "-s")) {
                 cmdline.sort = true;
-            }
+            } else
             if (!strcmp(argv[i], "-p")) {
                 expect_value = 3;
-            }
+            } else
             if (!strcmp(argv[i], "-u")) {
                 cmdline.hash = true;
-            }
+            } else
             if (!strcmp(argv[i], "-o")) {
                 expect_value = 5;
-            }
+            } else
             if (!strcmp(argv[i], "-h")) {
-                blobstool_help();
+                cmdline.help = true;
+            } else
+            if (!strcmp(argv[i], "-v")) {
+                cmdline.version = true;
+            } else
+            {
+                throw std::invalid_argument("Error: Unknown option " + std::string(argv[i]));
             }
         }
         else
@@ -125,7 +158,15 @@ int main(int argc, char *argv[])
        blobstool_help();
        return 1;
    }
-   BlobsToolCmdline cmdline = blobstool_cmdline_parser(argc, argv);
-   blobstool_cmdline_process(std::move(cmdline));
-   return 0;
+   BlobsToolCmdline cmdline;
+   try
+   {
+       cmdline = blobstool_cmdline_parser(argc, argv);
+   }
+   catch (std::invalid_argument &e)
+   {
+       std::cout << e.what() << std::endl;
+       return 1;
+   }
+   return blobstool_cmdline_process(std::move(cmdline));
 }
