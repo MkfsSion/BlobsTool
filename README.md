@@ -1,6 +1,6 @@
 # BlobsTool
 
-## Context
+## Contents
 - Introduction
 - Build
 - Usage
@@ -27,6 +27,10 @@ make
 `blobstools -s -i path_to_list_file -o output_file`
 ### Generate SHA1 for blobs
 `blobstools -u -p path_to_top_directory -i path_to_list -o output_file`
+### Show help
+`blobstools -h`
+### Show version
+`blobstool -v`
 
 Note: `path_to_top_directory` means the path that can access a blob with its realitive path
 
