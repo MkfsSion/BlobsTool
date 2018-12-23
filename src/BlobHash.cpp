@@ -26,7 +26,7 @@ std::string getBlobHexSHA1(const std::string &top,const Blob &b, bool source)
 {
     if (top.empty()||b.source.empty()||b.destination.empty())
     {
-        return nullptr;
+        return {};
     }
     std::string path;
     if (source)
@@ -40,7 +40,7 @@ std::string getBlobHexSHA1(const std::string &top,const Blob &b, bool source)
     FILE *fptr = fopen(path.c_str(), "r");
     if (!fptr)
     {
-        return nullptr;
+        return {};
     }
     uint8_t buf[512] = {0};
     uint8_t hash[20] = {0};
@@ -49,7 +49,7 @@ std::string getBlobHexSHA1(const std::string &top,const Blob &b, bool source)
     SHA_CTX ctx;
     if (!SHA1_Init(&ctx))
     {
-        return nullptr;
+        return {};
     }
     while ((s = fread(buf, 1, 512, fptr)))
     {
