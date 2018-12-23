@@ -152,6 +152,7 @@ static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
                     {
                         throw std::invalid_argument("Error: Unknown option for option \"-u\" " + std::string(argv[i]));
                     }
+                    break;
                 }
                 case 5:
                     cmdline.output_file = argv[i];
