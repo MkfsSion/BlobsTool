@@ -30,6 +30,7 @@ struct BlobsToolCmdline
     bool sort;
     std::string top_path;
     bool hash;
+    bool hash_source;
     std::string output_file;
     bool help;
     bool version;
@@ -43,11 +44,11 @@ static void blobstool_version()
 
 static void blobstool_help()
 {
-    std::cout << "Usage: blobstool -i list_file [ -s ] [ -p top_path ] [ -u ] -o write_out_file [-h] [-v]" << std::endl;
+    std::cout << "Usage: blobstool -i list_file [ -s ] [ -p top_path ] [ -u [s|d]] -o write_out_file [-h] [-v]" << std::endl;
     std::cout << "\t -i: Input file" << std::endl;
     std::cout << "\t -s: Sort blob by order" << std::endl;
     std::cout << "\t -p: Path for abstracting blobs" << std::endl;
-    std::cout << "\t -u: Update hash" << std::endl;
+    std::cout << "\t -u: Update hash(s: Update hash using source path,d: Update hash using destination path)" << std::endl;
     std::cout << "\t -o: Output file" << std::endl;
     std::cout << "\t -h: Show help" << std::endl;
     std::cout << "\t -v: Show version" << std::endl;
@@ -88,7 +89,7 @@ static int blobstool_cmdline_process(BlobsToolCmdline cmdline)
     }
     if (cmdline.hash)
     {
-        blist.reHash(cmdline.top_path, nullptr, true);
+        blist.reHash(cmdline.top_path, nullptr, cmdline.hash_source);
     }
     blist.write(ofs);
     return 0;
@@ -114,6 +115,7 @@ static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
             } else
             if (!strcmp(argv[i], "-u")) {
                 cmdline.hash = true;
+                expect_value = 4;
             } else
             if (!strcmp(argv[i], "-o")) {
                 expect_value = 5;
@@ -138,6 +140,19 @@ static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
                 case 3:
                     cmdline.top_path = argv[i];
                     break;
+                case 4:
+                {
+                    if (!strcmp(argv[i], "s"))
+                    {
+                        cmdline.hash_source = true;
+                    } else if(!strcmp(argv[i], "d"))
+                    {
+                        cmdline.hash_source = false;
+                    } else
+                    {
+                        throw std::invalid_argument("Error: Unknown option for option \"-u\" " + std::string(argv[i]));
+                    }
+                }
                 case 5:
                     cmdline.output_file = argv[i];
                     break;
@@ -154,7 +169,7 @@ int main(int argc, char *argv[])
 {
    if (argc == 1)
    {
-       std::cout << "No args specified" << std::endl;
+       std::cout << "Error: No args specified" << std::endl;
        blobstool_help();
        return 1;
    }
