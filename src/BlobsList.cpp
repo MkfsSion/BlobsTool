@@ -72,7 +72,13 @@ void BlobsList::reHash(std::string &top, std::function<bool(std::shared_ptr<Blob
     {
         if (!bs_except_fun)
         {
-            x->reHash(top, source);
+            auto f = [](std::shared_ptr<BlobsSection> &pbs) -> bool {
+                return !pbs->getVendorName().empty();
+            };
+            if (f(x))
+            {
+                x->reHash(top, source);
+            }
         }
         else
         {
