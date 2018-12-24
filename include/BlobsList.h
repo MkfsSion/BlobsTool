@@ -30,7 +30,7 @@ public:
     void addBlobsSection(BlobsSection &bs);
     void sort(std::function<bool(std::shared_ptr<BlobsSection> &a, std::shared_ptr<BlobsSection> &b)>,
               std::function<bool(std::shared_ptr<Blob> &a, std::shared_ptr<Blob> &b)>);
-    void reHash(std::string &top, std::function<bool(std::shared_ptr<BlobsSection> &a)> bs_except_fun, bool source);
+    void reHash(std::string &top, std::function<bool(std::shared_ptr<BlobsSection> &a, std::string &device)> bs_except_fun, bool source, std::string &device);
     void write(std::ofstream &ofs);
 };
 

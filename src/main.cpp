@@ -34,6 +34,7 @@ struct BlobsToolCmdline
     std::string output_file;
     bool help;
     bool version;
+    std::string device;
 };
 
 static void blobstool_version()
@@ -44,7 +45,7 @@ static void blobstool_version()
 
 static void blobstool_help()
 {
-    std::cout << "Usage: blobstool -i list_file [ -s ] [ -p top_path ] [ -u [s|d]] -o write_out_file [-h] [-v]" << std::endl;
+    std::cout << "Usage: blobstool -i list_file [ -s ] [ -p top_path ] [ -u [s|d]] -o write_out_file [-h] [-v] [-d device_name ]" << std::endl;
     std::cout << "\t -i: Input file" << std::endl;
     std::cout << "\t -s: Sort blob by order" << std::endl;
     std::cout << "\t -p: Path for abstracting blobs" << std::endl;
@@ -52,6 +53,7 @@ static void blobstool_help()
     std::cout << "\t -o: Output file" << std::endl;
     std::cout << "\t -h: Show help" << std::endl;
     std::cout << "\t -v: Show version" << std::endl;
+    std::cout << "\t -d: Device name" << std::endl;
 }
 
 static int blobstool_cmdline_process(BlobsToolCmdline cmdline)
@@ -89,7 +91,7 @@ static int blobstool_cmdline_process(BlobsToolCmdline cmdline)
     }
     if (cmdline.hash)
     {
-        blist.reHash(cmdline.top_path, nullptr, cmdline.hash_source);
+        blist.reHash(cmdline.top_path, nullptr, cmdline.hash_source, cmdline.device);
     }
     blist.write(ofs);
     return 0;
@@ -126,6 +128,9 @@ static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
             if (!strcmp(argv[i], "-v")) {
                 cmdline.version = true;
             } else
+            if (!strcmp(argv[i], "-d")) {
+                expect_value = 6;
+            } else
             {
                 throw std::invalid_argument("Error: Unknown option " + std::string(argv[i]));
             }
@@ -156,6 +161,9 @@ static BlobsToolCmdline blobstool_cmdline_parser(int argc, char **argv)
                 }
                 case 5:
                     cmdline.output_file = argv[i];
+                    break;
+                case 6:
+                    cmdline.device = argv[i];
                     break;
                 default:
                     break;
