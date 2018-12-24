@@ -1,4 +1,4 @@
-# BlobsTool
+# BlobsTool [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6037004101ca45318b61f00875d637a1)](https://www.codacy.com/app/MkfsSion/BlobsTool?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MkfsSion/BlobsTool&amp;utm_campaign=Badge_Grade)
 
 ## Contents
 -	Introduction
