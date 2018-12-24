@@ -20,11 +20,6 @@
 #include <BlobsSection.h>
 #include <BlobHash.h>
 
-static bool BlobCompare(std::shared_ptr<Blob> &a, std::shared_ptr<Blob> &b)
-{
-    return b->source > a->source;
-}
-
 std::shared_ptr<Blob> BlobsSection::getBlob(size_t index)
 {
     if (this->v_b.empty())
@@ -45,7 +40,10 @@ void BlobsSection::sort(std::function<bool(std::shared_ptr<Blob> &a, std::shared
 {
     if (!compare_fun)
     {
-        std::sort(this->v_b.begin(), this->v_b.end(), BlobCompare);
+        auto f = [] (std::shared_ptr<Blob> &a, std::shared_ptr<Blob> &b) -> bool {
+            return a->source < b->source;
+        };
+        std::sort(this->v_b.begin(), this->v_b.end(), f);
     }
     else
     {

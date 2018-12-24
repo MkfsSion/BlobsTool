@@ -19,11 +19,6 @@
 
 #include <BlobsList.h>
 
-static bool BlobsSectionCompare(std::shared_ptr<BlobsSection> &a, std::shared_ptr<BlobsSection> &b)
-{
-    return b->getSectionName() > a->getSectionName();
-}
-
 std::shared_ptr<BlobsSection> BlobsList::getBlobsSection(size_t index)
 {
     if (this->v_bs.empty())
@@ -45,7 +40,10 @@ void BlobsList::sort(std::function<bool(std::shared_ptr<BlobsSection> &a, std::s
 {
     if (!bs_compare_fun)
     {
-        std::sort(this->v_bs.begin(), this->v_bs.end(), BlobsSectionCompare);
+        auto f = [] (std::shared_ptr<BlobsSection> &a, std::shared_ptr<BlobsSection> &b) -> bool {
+            return a->getSectionName() < b->getSectionName();
+        };
+        std::sort(this->v_bs.begin(), this->v_bs.end(), f);
     }
     else
     {
@@ -72,12 +70,12 @@ void BlobsList::reHash(std::string &top, std::function<bool(std::shared_ptr<Blob
     {
         if (!bs_except_fun)
         {
-            auto f = [&device](std::shared_ptr<BlobsSection> &pbs) -> bool {
+            auto f = [](std::shared_ptr<BlobsSection> &pbs, std::string &device) -> bool {
                 if (pbs->getVendorName().empty())
                     return false;
                 return !(device == pbs->getVendorName());
             };
-            if (f(x))
+            if (f(x, device))
             {
                 x->reHash(top, source);
             }
