@@ -1,10 +1,10 @@
 # BlobsTool
 
 ## Contents
-- Introduction
-- Build
-- Usage
-- Contribution
+-	Introduction
+-	Build
+-	Usage
+-	Contribution
 
 ## Introduction
 A simple tool written in C++ for processing proprietary blobs list(**Still on development**).
@@ -12,23 +12,26 @@ A simple tool written in C++ for processing proprietary blobs list(**Still on de
 ## Build
 The tool is using cmake as its build system for generating makefiles and depends on openssl library for generating SHA1.
 ### ArchLinux
-```
+```shell
 sudo pacman -S git openssl cmake make gcc
 git clone https://github.com/MkfsSion/BlobsTool.git BlobsTool
 cd BlobsTool
 mkdir out
 cd out
-cmake -G ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 ```
 
 ## Usage
 ### Reorder blobs
-`blobstools -s -i path_to_list_file -o output_file`
+`blobstool -s -i path_to_list_file -o output_file`
 ### Generate SHA1 for blobs
-`blobstools -u -p path_to_top_directory -i path_to_list -o output_file`
+#### From source path
+`blobstool -u s -p path_to_top_directory -i path_to_list -o output_file`
+#### From destination path
+`blobstool -u d -p path_to_top_directory -i path_to_list -o output_file`
 ### Show help
-`blobstools -h`
+`blobstool -h`
 ### Show version
 `blobstool -v`
 
