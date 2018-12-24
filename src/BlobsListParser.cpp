@@ -20,7 +20,15 @@
 #include <stdexcept>
 #include <BlobsListParser.h>
 
-static Blob blob_parse(std::string &line)
+static std::string blob_substr(const std::string &s, size_t begin, size_t end = std::string::npos)
+{
+    if (end == std::string::npos)
+        return s.substr(begin);
+    else
+        return s.substr(begin, end - begin);
+}
+
+static Blob blob_parse(const std::string &line)
 {
     if (line.empty())
     {
@@ -38,31 +46,31 @@ static Blob blob_parse(std::string &line)
         size_t ppos = 0;
         if ((pos = line.find(':')) != std::string::npos && line.find('|') == std::string::npos)
         {
-            b.source = line.substr(b.modularized ? 1 : 0, pos - (b.modularized ? 1 : 0));
-            b.destination = line.substr(pos+1);
+            b.source = blob_substr(line, (b.modularized ? 1 : 0), pos);
+            b.destination = blob_substr(line, pos+1);
         }
         if ((pos = line.find('|')) != std::string::npos && line.find(':') == std::string::npos)
         {
-            b.source = line.substr(b.modularized ? 1 : 0, pos - (b.modularized ? 1 : 0));
+            b.source = blob_substr(line, (b.modularized ? 1 : 0), pos);
             b.destination = b.source;
-            b.sha1sum = line.substr(pos+1);
+            b.sha1sum = blob_substr(line, pos+1);
         }
         if ((dpos = line.find(':')) != std::string::npos && (ppos = line.find('|')) != std::string::npos)
         {
-            b.source = line.substr(b.modularized ? 1 : 0, dpos - (b.modularized ? 1 : 0));
-            b.destination = line.substr(dpos+1, ppos-dpos-1);
-            b.sha1sum = line.substr(ppos+1);
+            b.source = blob_substr(line, (b.modularized ? 1 : 0), dpos);
+            b.destination = blob_substr(line, dpos+1, ppos);
+            b.sha1sum = blob_substr(line, ppos+1);
         }
     }
     else
     {
-        b.source =line.substr(b.modularized ? 1 : 0);
+        b.source = blob_substr(line, (b.modularized ? 1 : 0));
         b.destination = b.source;
     }
     return b;
 }
 
-static BlobsSection blob_section_parse(std::string &line)
+static BlobsSection blob_section_parse(const std::string &line)
 {
     if (line.empty())
     {
@@ -73,14 +81,14 @@ static BlobsSection blob_section_parse(std::string &line)
     size_t vpos = 0;
     if ((npos = line.find('#')) != std::string::npos)
     {
-        if ((vpos = line.find("- from") + 6) !=  std::string::npos)
+        if ((vpos = line.find("- from")) !=  std::string::npos)
         {
-            bs.setSectionName(line.substr(npos+2, vpos-9-npos));
-            bs.setVendorName(line.substr(vpos+1));
+            bs.setSectionName(blob_substr(line, npos+2, vpos-1));
+            bs.setVendorName(blob_substr(line, vpos+7));
         }
         else
         {
-            bs.setSectionName(line.substr(npos+2));
+            bs.setSectionName(blob_substr(line, npos+2));
         }
     }
     return bs;
