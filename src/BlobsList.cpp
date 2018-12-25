@@ -62,7 +62,7 @@ void BlobsList::sort(std::function<bool(std::shared_ptr<BlobsSection> &a, std::s
     }
 }
 
-void BlobsList::reHash(std::string &top, std::function<bool(std::shared_ptr<BlobsSection> &a, std::string &device)> bs_except_fun ,bool source, std::string &device)
+void BlobsList::reHash(const std::string &top, std::function<bool(const std::shared_ptr<BlobsSection> &a, const std::string &device)> bs_except_fun ,bool source, const std::string &device) const
 {
     if (top.empty())
         return;
@@ -70,7 +70,7 @@ void BlobsList::reHash(std::string &top, std::function<bool(std::shared_ptr<Blob
     {
         if (!bs_except_fun)
         {
-            auto f = [](std::shared_ptr<BlobsSection> &pbs, std::string &device) -> bool {
+            auto f = [](const std::shared_ptr<BlobsSection> &pbs, const std::string &device) -> bool {
                 if (pbs->getVendorName().empty())
                     return false;
                 return !(device == pbs->getVendorName());

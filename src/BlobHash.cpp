@@ -49,6 +49,7 @@ std::string getBlobHexSHA1(const std::string &top,const Blob &b, bool source)
     SHA_CTX ctx;
     if (!SHA1_Init(&ctx))
     {
+        fclose(fptr);
         return {};
     }
     while ((s = fread(buf, 1, 512, fptr)))
@@ -56,6 +57,7 @@ std::string getBlobHexSHA1(const std::string &top,const Blob &b, bool source)
         SHA1_Update(&ctx, buf, s);
     }
     SHA1_Final(hash, &ctx);
+    fclose(fptr);
     for (int i = 0; i < 20; i++)
     {
         snprintf(&hexhash[2*i], 3, "%02x", hash[i]);

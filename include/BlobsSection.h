@@ -39,12 +39,12 @@ public:
     void addBlob(Blob &b);
     void setSectionName(std::string s) { this->section_name = std::move(s); }
     void setVendorName(std::string s) { this->vendor_name = std::move(s); }
-    size_t getSize() { return this->v_b.size(); }
+    size_t getSize() const { return this->v_b.size(); }
     void sort(std::function<bool(std::shared_ptr<Blob> &a, std::shared_ptr<Blob> &b)> compare_fun);
-    std::string getVendorName();
-    std::string getSectionName();
-    void reHash(std::string &top, bool source);
-    void write(std::ofstream &ofs);
+    std::string getVendorName() const;
+    std::string getSectionName() const;
+    void reHash (const std::string &top, bool source) const;
+    void write(std::ofstream &ofs) const;
 };
 
 #endif //BLOBSTOOL_BLOBSSECTION_H

@@ -78,9 +78,9 @@ static BlobsSection blob_section_parse(const std::string &line)
     }
     BlobsSection bs;
     size_t npos = 0;
-    size_t vpos = 0;
     if ((npos = line.find('#')) != std::string::npos)
     {
+        size_t vpos = 0;
         if ((vpos = line.find("- from")) !=  std::string::npos)
         {
             bs.setSectionName(blob_substr(line, npos+2, vpos-1));

@@ -51,16 +51,16 @@ void BlobsSection::sort(std::function<bool(std::shared_ptr<Blob> &a, std::shared
     }
 }
 
-std::string BlobsSection::getSectionName()
+std::string BlobsSection::getSectionName() const
 {
     return this->section_name;
 }
 
-std::string BlobsSection::getVendorName()
+std::string BlobsSection::getVendorName() const
 {
     return this->vendor_name;
 }
-void BlobsSection::reHash(std::string &top, bool source)
+void BlobsSection::reHash(const std::string &top, bool source) const
 {
     if (top.empty())
         return;
@@ -70,7 +70,7 @@ void BlobsSection::reHash(std::string &top, bool source)
     }
 }
 
-void BlobsSection::write(std::ofstream &ofs)
+void BlobsSection::write(std::ofstream &ofs) const
 {
     if (!ofs.is_open())
         return;

@@ -26,11 +26,11 @@ private:
     std::vector<std::shared_ptr<BlobsSection>> v_bs;
 public:
     std::shared_ptr<BlobsSection> getBlobsSection(size_t index);
-    size_t getSize() { return this->v_bs.size(); }
+    size_t getSize() const { return this->v_bs.size(); }
     void addBlobsSection(BlobsSection &bs);
     void sort(std::function<bool(std::shared_ptr<BlobsSection> &a, std::shared_ptr<BlobsSection> &b)>,
               std::function<bool(std::shared_ptr<Blob> &a, std::shared_ptr<Blob> &b)>);
-    void reHash(std::string &top, std::function<bool(std::shared_ptr<BlobsSection> &a, std::string &device)> bs_except_fun, bool source, std::string &device);
+    void reHash(const std::string &top, std::function<bool(const std::shared_ptr<BlobsSection> &a, const std::string &device)> bs_except_fun, bool source, const std::string &device) const;
     void write(std::ofstream &ofs);
 };
 
