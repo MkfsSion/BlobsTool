@@ -1,4 +1,4 @@
-/* BlobsListParser.cpp
+﻿/* BlobsListParser.cpp
  *
  * Copyright (C) 2018 MkfsSion <mkfssion@mkfssion.com>
  *
@@ -18,6 +18,9 @@
  */
 
 #include <stdexcept>
+#ifdef _WIN32
+#include <string>
+#endif
 #include <BlobsListParser.h>
 
 static std::string blob_substr(const std::string &s, size_t begin, size_t end = std::string::npos)

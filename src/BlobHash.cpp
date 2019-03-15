@@ -1,4 +1,4 @@
-/* BlobHash.cpp
+﻿/* BlobHash.cpp
  *
  * Copyright (C) 2018 MkfsSion <mkfssion@mkfssion.com>
  *

@@ -1,4 +1,4 @@
-/* hashtest.cpp
+﻿/* hashtest.cpp
  *
  * Copyright (C) 2018 MkfsSion <mkfssion@mkfssion.com>
  *
@@ -18,14 +18,20 @@
  */
 
 #include <iostream>
+#include <filesystem>
 #include <BlobHash.h>
 
 int main()
 {
-    std::string path = getenv("PWD");
+	std::string path(std::filesystem::current_path().u8string());
     Blob b;
+#ifdef _WIN32
+	b.source = "hashtest.exe";
+	b.destination = "hashtest.exe";
+#else
     b.source = "hashtest";
     b.destination = "hashtest";
+#endif // _WIN32
     std::string hash = getBlobHexSHA1(path, b, true);
     std::cout << "Self hash is " << hash << std::endl;
     return 0;

@@ -55,6 +55,12 @@ dkms.conf
 .idea/
 cmake-build-debug/
 
+# Visual Studio
+.vs/
+Debug/
+x64/
+hashtest/x64/
+
 # Test
 hashttest
 blobstool

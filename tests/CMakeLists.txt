@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.4)
 
+set(CMAKE_CXX_STANDARD 17)
 set(HASH_SRCS ../src/BlobHash.cpp hashtest.cpp)
 include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/../include
