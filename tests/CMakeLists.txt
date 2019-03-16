@@ -6,4 +6,8 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/../include
 )
 add_executable(hashtest ${HASH_SRCS})
-target_link_libraries(hashtest crypto ssl)
+IF(CMAKE_SYSTEM_NAME MATCHES "Linux" AND CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    target_link_libraries(hashtest crypto ssl stdc++fs)
+ELSE()
+    target_link_libraries(hashtest crypto ssl)
+ENDIF()

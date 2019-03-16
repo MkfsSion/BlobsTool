@@ -23,11 +23,11 @@
 
 int main()
 {
-	std::string path(std::filesystem::current_path().u8string());
+    std::string path(std::filesystem::current_path().u8string());
     Blob b;
 #ifdef _WIN32
-	b.source = "hashtest.exe";
-	b.destination = "hashtest.exe";
+    b.source = "hashtest.exe";
+    b.destination = "hashtest.exe";
 #else
     b.source = "hashtest";
     b.destination = "hashtest";
