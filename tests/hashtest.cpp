@@ -26,13 +26,13 @@ int main()
     std::string path(std::filesystem::current_path().u8string());
     Blob b;
 #ifdef _WIN32
-    b.source = "hashtest.exe";
-    b.destination = "hashtest.exe";
+    b.source = HASHTEST_NAME ".exe";
 #else
-    b.source = "hashtest";
-    b.destination = "hashtest";
+    b.source = HASHTEST_NAME;
 #endif // _WIN32
+    b.destination = b.source;
     std::string hash = getBlobHexSHA1(path, b, true);
     std::cout << "Self hash is " << hash << std::endl;
     return 0;
 }
+
