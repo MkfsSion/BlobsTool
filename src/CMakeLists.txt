@@ -4,4 +4,4 @@ include_directories(
 )
 aux_source_directory(. BLOBSTOOL_SRCS)
 add_executable(blobstool ${BLOBSTOOL_SRCS})
-target_link_libraries(blobstool crypto ssl)
+target_link_libraries(blobstool crypto)
